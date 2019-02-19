@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuickSort extends SortAlgorithm {
@@ -20,7 +22,12 @@ public class QuickSort extends SortAlgorithm {
      */
     @Override
     public int[] sort(int[] array) {
-        // TODO: Sort the array. Make sure you avoid the O(N^2) runtime worst-case
+        if (array.length <= 1){
+            return array;
+        }
+        shuffleArray(array);
+        quickSort(array, 0, array.length-1);
+        System.out.println("Sorted Array: "+ Arrays.toString(array));
         return array;
     }
 
@@ -35,7 +42,8 @@ public class QuickSort extends SortAlgorithm {
     public void quickSort(int[] a, int lo, int hi) {
         if (lo < hi) {
             int p = partition(a, lo, hi);
-            // TODO
+            quickSort(a, lo, p-1);
+            quickSort(a, p+1, hi);
         }
     }
 
@@ -49,8 +57,20 @@ public class QuickSort extends SortAlgorithm {
      * @param hi The ending index of the subarray being considered (inclusive)
      */
     public int partition(int[] array, int lo, int hi) {
-        // TODO
-        return 0;
+        int flag = lo;
+        int pointer = lo+1;
+        while (pointer <= hi){
+            if (array[pointer] < array[flag]){
+                    int temp = array[pointer];
+                    for (int i = pointer; i > lo; i--){
+                        array[i] = array[i-1];
+                    }
+                    array[lo] = temp;
+                    flag++;
+            }
+            pointer++;
+        }
+        return flag;
     }
 
 }

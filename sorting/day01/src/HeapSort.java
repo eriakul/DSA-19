@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class HeapSort extends SortAlgorithm {
     int size;
     int[] heap;
@@ -18,7 +20,26 @@ public class HeapSort extends SortAlgorithm {
     // Corrects the position of element indexed i by sinking it.
     // Use either recursion or a loop to then sink the child
     public void sink(int i) {
-        // TODO
+        if (leftChild(i) < this.size && this.heap[leftChild(i)] > this.heap[i]){
+            if (rightChild(i)>= this.size || this.heap[leftChild(i)] > this.heap[rightChild(i)]){
+               swap(i, leftChild(i));
+               sink(leftChild(i));
+            }
+            else{
+                swap(i, rightChild(i));
+                sink(rightChild(i));
+            }
+        }
+        if (rightChild(i) < this.size && this.heap[rightChild(i)] > this.heap[i]){
+            if (leftChild(i)>= this.size || this.heap[leftChild(i)] < this.heap[rightChild(i)]){
+                swap(i, rightChild(i));
+                sink(rightChild(i));
+            }
+            else{
+                swap(i, leftChild(i));
+                sink(leftChild(i));
+            }
+        }
     }
 
     // Given the array, build a heap by correcting every non-leaf's position, starting from the bottom, then
@@ -28,7 +49,13 @@ public class HeapSort extends SortAlgorithm {
         this.size = array.length;
 
         for (int i=this.size / 2 - 1; i>=0; i--) {
-            // TODO
+            sink(i);
+        }
+    }
+
+    public void heapify2() {
+        for (int i=this.size / 2 - 1; i>=0; i--) {
+            sink(i);
         }
     }
 
@@ -41,12 +68,23 @@ public class HeapSort extends SortAlgorithm {
      */
     @Override
     public int[] sort(int[] array) {
-        heapify(array);
+        this.heap = array;
+        this.size = this.heap.length;
 
-        for (int i=size-1; i>0; i--) {
-            // TODO
+        for (int i=this.size-1; i>0; i--) {
+            this.size = i+1;
+            heapify2();
+            swap(0, i);
+
         }
-
-        return heap;
+        return this.heap;
     }
+
+    public void swap(int i, int j) {
+        int temp = this.heap[j];
+        this.heap[j] = this.heap[i];
+        this.heap[i] = temp;
+
+    }
+
 }
