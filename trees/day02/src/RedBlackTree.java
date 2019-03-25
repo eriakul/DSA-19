@@ -35,19 +35,40 @@ public class RedBlackTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
     // make a left-leaning link lean to the right
     TreeNode<T> rotateRight(TreeNode<T> h) {
-        // TODO
-        return h;
+        System.out.println("Rotating right on " + h.key + "!");
+        TreeNode y = h.leftChild;
+        h.leftChild = y.rightChild;
+        y.rightChild = h;
+
+        y.color = h.color;
+        y.rightChild.color = RED;
+        System.out.println("Returning " + y.key);
+        return y;
     }
 
     // make a right-leaning link lean to the left
     TreeNode<T> rotateLeft(TreeNode<T> h) {
-        // TODO
-        return h;
+        System.out.println("Rotating left on " + h.key + "!");
+        TreeNode y = h.rightChild;
+        h.rightChild = y.leftChild;
+        y.leftChild = h;
+
+
+        y.color = h.color;
+        y.leftChild.color = RED;
+
+        System.out.println("Returning " + y.key);
+        return y;
     }
 
     // flip the colors of a TreeNode and its two children
     TreeNode<T> flipColors(TreeNode<T> h) {
-        // TODO
+        System.out.println("Flipping colors on" + h.key + "!");
+        h.color = !h.color;
+        h.rightChild.color = !h.rightChild.color;
+
+        h.leftChild.color = !h.leftChild.color;
+
         return h;
     }
 
@@ -60,7 +81,15 @@ public class RedBlackTree<T extends Comparable<T>> extends BinarySearchTree<T> {
      * return balanced node
      */
     private TreeNode<T> balance(TreeNode<T> h) {
-        // TODO
+        if (isRed(h.rightChild)){
+            h = rotateLeft(h);
+        }
+        if (isRed(h.leftChild) && isRed(h.leftChild.leftChild)){
+            h = rotateRight(h);
+        }
+        if (isRed(h.leftChild) && isRed(h.rightChild)){
+            h = flipColors(h);
+        }
         return h;
     }
 
@@ -72,8 +101,11 @@ public class RedBlackTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     @Override
     TreeNode<T> insert(TreeNode<T> h, T key) {
         h = super.insert(h, key);
-        // TODO: use balance to correct for the three rotation cases
-        return h;
+
+        System.out.println(inOrderTraversal());
+
+        return balance(h);
+
     }
 
 

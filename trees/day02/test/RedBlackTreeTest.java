@@ -130,9 +130,12 @@ public class RedBlackTreeTest {
         RedBlackTree<Integer> rbt = new RedBlackTree<>();
         List<Integer> input = Arrays.asList(3, 1, 2, 6, 3, 4, 9, 10, 1, 2, 3);
         for (Integer i: input) {
+            System.out.println("Adding "+ i);
             rbt.add(i);
+
+            isRedBlack(rbt);
         }
-        isRedBlack(rbt);
+//        isRedBlack(rbt);
         containsCorrectValues(rbt, input);
     }
 

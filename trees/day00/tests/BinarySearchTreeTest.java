@@ -95,6 +95,8 @@ public class BinarySearchTreeTest {
 
     private void testSuccessor(BinarySearchTree<Integer> bst, Integer[] input) {
         Integer[] sorted = sorted(input);
+
+
         for (int j = 0; j < sorted.length; j++) {
             Integer successor = null;
             if (j < sorted.length - 1)

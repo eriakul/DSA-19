@@ -1,7 +1,10 @@
 package divide_and_conquer;
 
-public class PeakFinding {
+import java.util.Arrays;
 
+public class PeakFinding {
+    static Boolean XAXIS = true;
+    static Boolean YAXIS = false;
     // Return -1 if left is higher, 1 if right is higher, 0 if peak
     private static int peakOneD(int i, int[] nums) {
         if (i > 0 && nums[i] < nums[i - 1])
@@ -51,13 +54,87 @@ public class PeakFinding {
 
 
     public static int findOneDPeak(int[] nums) {
-        // TODO
+        int peak = findOneDPeak(nums, 0, nums.length - 1);
+        return peak;
+    }
+
+    public static int findOneDPeak(int[] nums, int begin,  int end) {
+        if (begin == end){
+            return begin;
+        }
+
+        int middle = (begin+end)/2;
+
+        int side = peakOneD(middle, nums);
+
+        if (side == 0){
+            return middle;
+        }
+        else if (side == -1){
+            return findOneDPeak(nums, begin, middle -1);
+        }
+        else if (side == 1){
+            return findOneDPeak(nums, middle + 1, end);
+        }
+
         return 0;
     }
 
     public static int[] findTwoDPeak(int[][] nums) {
-        // TODO
-        return null;
+        int[] peak = findTwoDPeak(nums, 0, nums.length, 0, nums[0].length, XAXIS);
+        System.out.println(Arrays.toString(peak));
+        return peak;
+    }
+
+    public static int[] findTwoDPeak(int[][] nums, int x1, int x2, int y1, int y2, Boolean readjustingAxis) {
+        System.out.println(Arrays.toString(new int[] {x1, x2, y1, y2}));
+        if (x1==x2){
+            return new int[] {x1, maxYIndex(x1, y1, y2, nums)};
+        }
+        else if (y1 == y2){
+            return new int[] {maxXIndex(y1, x1, x2,nums), y1};
+        }
+
+
+        if (readjustingAxis == XAXIS){
+            int max_index = maxXIndex(y1, x1, x2, nums);
+
+            int peak = peakY(max_index, y1, nums);
+
+            if (peak == 0){
+                System.out.println("HERE");
+                return new int[] {y1, max_index};
+            }
+
+            else if ( max_index < (x1+x2)/2){
+                return findTwoDPeak(nums, x1, (x1+x2)/2 -1, y1, y2, YAXIS);
+            }
+            else if ( max_index > (x1+x2)/2){
+                return findTwoDPeak(nums, (x1+x2)/2 +1, x2, y1, y2, YAXIS);
+            }
+            else {
+                return findTwoDPeak(nums, (x1+x2)/2, x2, y1, y2, YAXIS);
+            }
+        }
+        else{
+            int max_index = maxYIndex(x1,y1,y2, nums);
+
+            int peak = peakX(x1, max_index, nums);
+
+            if (peak == 0){
+                System.out.println("HERE 2");
+                return new int[] {x1, max_index};
+            }
+            else if (max_index < (y1+y2)/2){
+                return findTwoDPeak(nums, x1, x2, y1, (y1+y2)/2 - 1, XAXIS);
+            }
+            else if (max_index > (y1+y2)/2){
+                return findTwoDPeak(nums, x1, x2, (y1+y2)/2 + 1, y2, XAXIS);
+            }
+            else {
+                return findTwoDPeak(nums, x1, x2, (y1+y2)/2, y2, XAXIS);
+            }
+        }
     }
 
 }

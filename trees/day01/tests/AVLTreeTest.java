@@ -31,7 +31,9 @@ public class AVLTreeTest {
         inputs[3] = new Integer[]{13, 12, 10, 5, 3, -1, -7, -10, -50};
         inputs[4] = new Integer[]{23, 15, 10, 8, 40, 38, 37, 36, 24, 25, 26, 27};
         for (int i = 0; i < 5; i++) {
+            System.out.println("Testing BST"+ i);
             bsts[i].addAll(inputs[i]);
+            System.out.println(bsts[i].inOrderTraversal());
             assertEquals(bsts[i].size(), inputs[i].length);
             assertValidAVL(bsts[i].root);
         }

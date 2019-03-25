@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BinarySearchTree<T extends Comparable<T>> {
@@ -28,8 +30,20 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public List<T> inOrderTraversal() {
-        // TODO
-        return null;
+        List<T> new_list = new ArrayList<T>();
+        new_list = inOrderTraversalHelper(new_list, root);
+//        System.out.println(new_list);
+        return new_list;
+    }
+
+    List<T> inOrderTraversalHelper(List<T> list, TreeNode<T> node){
+        if (node == null){
+            return list;
+        }
+        list = inOrderTraversalHelper(list, node.leftChild);
+        list.add(node.key);
+        return inOrderTraversalHelper(list, node.rightChild);
+
     }
 
     /**
@@ -53,21 +67,30 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private TreeNode<T> delete(TreeNode<T> n) {
+
+        System.out.println("List: " + inOrderTraversal());
         // Recursive base case
         if (n == null) return null;
 
         TreeNode<T> replacement;
 
+        System.out.println("Delete " + n.key);
+
         if (n.isLeaf())
             // Case 1: no children
             replacement = null;
-        else if (n.hasRightChild() != n.hasLeftChild())
+        else if (n.hasRightChild() != n.hasLeftChild()) {
             // Case 2: one child
+            System.out.println("Has one child");
             replacement = (n.hasRightChild()) ? n.rightChild : n.leftChild; // replacement is the non-null child
+        }
         else {
-            // Case 3: two children
-            // TODO
-            replacement = null;
+            TreeNode<T> predecessor_node = findPredecessor(n);
+            n.key = predecessor_node.key;
+            System.out.println("Pred = " + predecessor_node.toString());
+            delete(predecessor_node);
+            replacement = n;
+
         }
 
         // Put the replacement in its correct place, and set the parent.
@@ -101,14 +124,71 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return null;
     }
 
-    private TreeNode<T> findPredecessor(TreeNode<T> n) {
-        // TODO
-        return null;
+    private TreeNode<T> findPredecessor(TreeNode<T> node) {
+        if (node.leftChild != null){
+            node = node.leftChild;
+            while (node.rightChild != null){
+                node = node.rightChild;
+            }
+            return node;
+        }
+        else{ //There isnt a right child
+            if (node.parent == null){
+                return null;
+            }
+            else if (node.isRightChild()){
+                return node.parent;
+            }
+            else {
+                node = node.parent;
+                while (true){
+                    if (node.parent == null){
+                        return null;
+                    }
+                    else if (node.isRightChild()){
+                        return node.parent;
+                    }
+                    else {
+                        node = node.parent;
+                    }
+                }
+
+            }
+
+
+        }
     }
 
-    private TreeNode<T> findSuccessor(TreeNode<T> n) {
-        // TODO
-        return null;
+    private TreeNode<T> findSuccessor(TreeNode<T> node) {
+        if (node.rightChild != null){
+            node = node.rightChild;
+            while (node.leftChild != null){
+                node = node.leftChild;
+            }
+            return node;
+        }
+        else{ //There isnt a right child
+            if (node.parent == null){
+                return null;
+            }
+            else if (node.isLeftChild()){
+                return node.parent;
+            }
+            else {
+                node = node.parent;
+                while (true){
+                    if (node.parent == null){
+                        return null;
+                    }
+                    else if (node.isLeftChild()){
+                        return node.parent;
+                    }
+                    else {
+                        node = node.parent;
+                    }
+                }
+            }
+        }
     }
 
     /**
